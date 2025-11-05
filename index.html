@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Server Restructure Plan - Professional Implementation Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f0 100%);
+            color: #334155;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+            border-left: 6px solid #4f46e5;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .meta-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-green { background: #10b981; }
+        .dot-blue { background: #3b82f6; }
+        .dot-purple { background: #8b5cf6; }
+
+        .banner {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 2px solid #c7d2fe;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .banner h2 {
+            color: #312e81;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .banner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .banner-item {
+            font-size: 0.95em;
+            color: #4338ca;
+        }
+
+        .banner-item strong {
+            color: #312e81;
+        }
+
+        .phase {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .phase-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            padding: 25px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .phase-header:hover {
+            background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+        }
+
+        .phase-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .phase-duration {
+            color: #c7d2fe;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .phase-goal {
+            color: #e0e7ff;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .phase-content {
+            display: none;
+            padding: 30px;
+            background: #f8fafc;
+        }
+
+        .phase.active .phase-content {
+            display: block;
+        }
+
+        .action {
+            background: white;
+            border-left: 4px solid #818cf8;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .action h4 {
+            color: #1e293b;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action p {
+            color: #475569;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .deliverable {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border: 1px solid #c7d2fe;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .deliverable-label {
+            color: #312e81;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .deliverable-text {
+            color: #4338ca;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+
+        .tips-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+            border-top: 6px solid #a855f7;
+        }
+
+        .tips-section h2 {
+            color: #1e293b;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .tip {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border: 1px solid #e9d5ff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .tip h3 {
+            color: #6b21a8;
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip p {
+            color: #7c3aed;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .tools-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .tools-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .tool-category h3 {
+            color: #818cf8;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .tool-category ul {
+            list-style: none;
+        }
+
+        .tool-category li {
+            color: #cbd5e1;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .tool-category li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #818cf8;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .footer h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            color: #e0e7ff;
+            margin-bottom: 15px;
+        }
+
+        .footer-meta {
+            color: #c7d2fe;
+            font-size: 0.9em;
+        }
+
+        .toggle-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .phase.active .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .print-button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .print-button:hover {
+            background: #4338ca;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .print-button {
+                display: none;
+            }
+            
+            .phase-content {
+                display: block !important;
+            }
+            
+            .phase {
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .phase-title {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
+
+        <div class="header">
+            <h1>Discord Server Restructure: Professional Implementation Plan</h1>
+            <p>Research-backed, stupidly professional approach to planning and visualizing your 50-member gaming/RP server restructure without touching the live server</p>
+            <div class="meta">
+                <div class="meta-item">
+                    <div class="meta-dot dot-green"></div>
+                    <span>Total Timeline: 3 weeks</span>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-dot dot-blue"></div>
+                    <span>6 Phases</span>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-dot dot-purple"></div>
+                    <span>15+ Deliverables</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner">
+            <h2>Research-Backed Enhancements (2025 Best Practices)</h2>
+            <div class="banner-grid">
+                <div class="banner-item">
+                    <strong>Community Features First:</strong> Enable Discord's native Community Server tools for Forums, AutoMod, and member screening before restructuring
+                </div>
+                <div class="banner-item">
+                    <strong>Thread-Based RP:</strong> Use Threads instead of dozens of scenario channels to keep navigation clean while preserving conversations
+                </div>
+                <div class="banner-item">
+                    <strong>Permission Sync:</strong> Leverage category permission inheritance to manage 50 channels with 5 category-level configurations instead of 50 individual setups
+                </div>
+                <div class="banner-item">
+                    <strong>View As Role Testing:</strong> Use Discord's built-in preview tool to verify every permission structure before launch
+                </div>
+                <div class="banner-item">
+                    <strong>Notification Hygiene:</strong> Default to @mentions-only to prevent server mutes that kill engagement
+                </div>
+                <div class="banner-item">
+                    <strong>Channel Limits:</strong> Plan for 40-50 channel maximum (50 per category limit, 500 server limit) to future-proof growth
+                </div>
+            </div>
+        </div>
+
+        <div class="phase" id="phase1">
+            <div class="phase-header" onclick="togglePhase('phase1')">
+                <div class="phase-title">
+                    <span class="toggle-icon">&#9654;</span> Phase 1: Discovery & Assessment
+                </div>
+                <div class="phase-duration">Week 1, Days 1-3</div>
+                <div class="phase-goal">Goal: Understand current state and identify pain points through data and member feedback</div>
+            </div>
+            <div class="phase-content">
+                <div class="action">
+                    <h4>Comprehensive Server Audit</h4>
+                    <p>Document every category, channel, role, and permission structure. Track usage patterns manually by observing active discussions, dead channels, and engagement hotspots. Use Discord Server Insights if available to analyze active users, message volume by channel, and peak activity times.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Audit Spreadsheet with columns: Category Name, Channel Name, Channel Type, Usage Level (High/Medium/Low/Dead), Key Permissions, Current Purpose</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>SWOT Analysis</h4>
+                    <p>Create a professional analysis framework examining Strengths (tight-knit gaming community, active RP engagement), Weaknesses (channel clutter, unclear navigation for pop-in members, redundant channels), Opportunities (improved gaming lobby structure, organized RP threads, retention features), and Threats (member inactivity, confusion driving people away).</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">2x2 SWOT Matrix (Google Sheets or PowerPoint slide)</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Member Survey Distribution</h4>
+                    <p>Deploy a Google Form or Typeform survey posted in announcements channel. Ask 5-7 targeted questions: Which channels do you use most for gaming/RP? What frustrates you about finding channels? Are there channels you forget exist? What new features would improve your experience? What should we keep exactly as-is? Allow anonymous responses to encourage honest feedback. Give members 48-72 hours to respond.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Survey results CSV with response rate target of 70%+ (35+ responses from 50 members)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase" id="phase2">
+            <div class="phase-header" onclick="togglePhase('phase2')">
+                <div class="phase-title">
+                    <span class="toggle-icon">&#9654;</span> Phase 2: Research & Persona Development
+                </div>
+                <div class="phase-duration">Week 1, Days 4-5</div>
+                <div class="phase-goal">Goal: Transform feedback into actionable user profiles that guide design decisions</div>
+            </div>
+            <div class="phase-content">
+                <div class="action">
+                    <h4>User Persona Creation</h4>
+                    <p>Based on survey responses and observation, develop 3-4 distinct member personas. For a gaming/RP server, typical personas might include: Daily Gamer (logs in 5x/week, needs quick lobby access, uses voice channels heavily), RP Enthusiast (joins 2-3x/week for ongoing storylines, prefers organized scenario threads), Social Lurker (checks in monthly, overwhelmed by channel volume, mostly reads), and Flex Member (switches between gaming and RP, wants clear separation). Each persona should include goals, frustrations, and ideal channel usage patterns.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">3-4 persona cards created in Canva or PowerPoint with names, photos, demographics, goals, pain points, and behavioral patterns</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Collaborative Planning Session</h4>
+                    <p>Host a voice channel meeting with 5-8 most active members representing different user types. Share screen showing current structure. Conduct structured brainstorming on pain points, desired features, and organizational preferences. Record the session (announce this at start) for later reference. Take detailed notes on recurring themes and suggestions.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Meeting notes document with timestamp-linked recording, summary of key insights, and voting results on proposed ideas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase" id="phase3">
+            <div class="phase-header" onclick="togglePhase('phase3')">
+                <div class="phase-title">
+                    <span class="toggle-icon">&#9654;</span> Phase 3: Design & Iteration
+                </div>
+                <div class="phase-duration">Week 2, Days 1-3</div>
+                <div class="phase-goal">Goal: Create 2-3 structural options informed by research and UX principles</div>
+            </div>
+            <div class="phase-content">
+                <div class="action">
+                    <h4>Design Principle Framework</h4>
+                    <p>Establish core principles based on Discord best practices from 2025 research: Clear Hierarchy (Welcome to Gaming to RP to Social to Admin order), Smart Consolidation (merge redundant channels like random-1 and random-2), Onboarding Optimization (dedicated START HERE category with rules, server guide, and introductions), Scalability (structure supports growth to 100+ members without re-organizing), and Engagement Features (events calendar, achievement shoutouts, weekly challenges). Limit categories to 4-7 and channels per category to 4-5 maximum for optimal navigation.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Design Principles Document (1 page) outlining structural philosophy</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Blueprint Spreadsheet Enhancement</h4>
+                    <p>Expand the audit spreadsheet into three version tabs (Option A: Conservative, Option B: Moderate, Option C: Aggressive). For each option, add columns: STATUS (Keep/Move/Rename/Merge/Archive/New), CURRENT CATEGORY, PROPOSED CATEGORY, CURRENT CHANNEL NAME, PROPOSED CHANNEL NAME, CHANNEL TYPE, PURPOSE, PERMISSIONS STRUCTURE, PERSONA IMPACT (which personas benefit), and RATIONALE. Conservative option makes minimal changes, Moderate adds new categories and uses threads for RP, Aggressive includes complete overhaul with new roles, bot integration, and calendar system.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Multi-tab spreadsheet with three complete restructure scenarios</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Permission Architecture Design</h4>
+                    <p>Design role hierarchy following principle of least privilege. Typical structure for 50-member server: @everyone (view/read only in most channels), Member (granted after introduction, can post in gaming/RP channels), Active Gamer (access to game-specific lobbies), RP Participant (access to RP categories and thread creation), Moderator (message management, timeout powers), and Admin (channel management, role assignment). Use color-coding for visual hierarchy. Document which roles unlock which categories using permission sync.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Role Permission Matrix showing hierarchy and access patterns</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase" id="phase4">
+            <div class="phase-header" onclick="togglePhase('phase4')">
+                <div class="phase-title">
+                    <span class="toggle-icon">&#9654;</span> Phase 4: Visualization & Prototyping
+                </div>
+                <div class="phase-duration">Week 2, Days 4-5</div>
+                <div class="phase-goal">Goal: Create visual artifacts that make the restructure plan tangible and understandable</div>
+            </div>
+            <div class="phase-content">
+                <div class="action">
+                    <h4>Hierarchical Diagrams</h4>
+                    <p>Use draw.io or Lucidchart to create side-by-side comparison diagrams. Left side shows current structure with all categories and channels. Right side shows proposed structure for each of three options. Use Discord-style visual language: text channel icons (#), voice channel icons (speaker symbol), category folders, and role badges. Color-code elements: Green for Keep, Yellow for Move/Rename, Red for Archive, Blue for New. Create separate diagram for each option.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">6 total diagrams (Current + 3 Options) exported as high-resolution PNGs</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>High-Fidelity UI Mockups</h4>
+                    <p>Create pixel-perfect Discord interface mockups in Figma using free Discord UI kits from Freepik or community templates. Show exactly what members will see: left sidebar with categories expanded, channel names with icons, role colors in member list. Add realistic fake messages in key channels (welcome message in introductions, gaming coordination in lobby, RP starter in scenario channel). Create mockups for before-state and all three after-states.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">4 Figma artboards showing current + 3 proposed layouts with interactive prototype links</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Interactive Planning Board</h4>
+                    <p>Build a Miro or Trello board organizing the restructure project visually. Create columns for each phase. Add cards for each channel with color-coding matching diagrams. Include sticky notes for member feedback quotes, design decisions, and open questions. Embed screenshots and link to other deliverables. Share view-only link for asynchronous stakeholder review.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Miro board URL with comprehensive project visualization</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase" id="phase5">
+            <div class="phase-header" onclick="togglePhase('phase5')">
+                <div class="phase-title">
+                    <span class="toggle-icon">&#9654;</span> Phase 5: Proposal Documentation
+                </div>
+                <div class="phase-duration">Week 3, Days 1-2</div>
+                <div class="phase-goal">Goal: Package all research, design, and planning into executive-level deliverable</div>
+            </div>
+            <div class="phase-content">
+                <div class="action">
+                    <h4>Comprehensive Proposal Document</h4>
+                    <p>Create 12-18 page professional PDF proposal in Google Docs. Structure: Cover Page (project title, date, version, team), Executive Summary (1 paragraph overview with recommendation), Table of Contents, Current State Analysis (SWOT, survey highlights with 3-5 key quotes, usage statistics), Persona Profiles (embed persona cards), The Three Options (dedicated section for each with embedded diagrams, mockups, key changes list, pros/cons table, implementation complexity, persona impact matrix, cost if any), Recommended Approach (detailed rationale for selected option), Implementation Roadmap (Gantt chart showing Pre-Launch preparations, Day 1-3 execution steps, Week 1 monitoring, Week 2-4 iteration), Risk Mitigation Plan, Success Metrics, and Appendices.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Professional PDF proposal document (12-18 pages) with embedded visuals</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Executive Summary Slide Deck</h4>
+                    <p>Create condensed 8-10 slide PowerPoint presentation for visual presentation. Slides: Title, Problem Statement with statistics, Research Summary (survey results visualized), Persona Overview, Current vs Proposed Structure Comparison, Recommended Option Highlights, Implementation Timeline Visual, Next Steps and Approval Process. Use consistent branding, minimal text, high-impact visuals. Design for screen-sharing in voice call.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">PowerPoint or Google Slides presentation optimized for screen sharing</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Implementation Checklist</h4>
+                    <p>Create actionable step-by-step checklist for execution day. Break down into hourly increments: Pre-Launch (48 hours before - backup settings, announce maintenance window, prepare announcement message), Maintenance Mode (set server to admin-only view), Hour 1 (create new categories, set permissions), Hour 2 (move and rename existing channels), Hour 3 (create new channels, add descriptions), Hour 4 (test permissions with dummy account, verify role access), Hour 5 (create welcome messages, pin resources), Re-Opening (publish announcement, monitor initial reactions), Week 1 (collect feedback, make minor adjustments). Include rollback procedures if critical issues arise.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Implementation Checklist Spreadsheet with checkboxes and time estimates</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase" id="phase6">
+            <div class="phase-header" onclick="togglePhase('phase6')">
+                <div class="phase-title">
+                    <span class="toggle-icon">&#9654;</span> Phase 6: Presentation & Approval
+                </div>
+                <div class="phase-duration">Week 3, Day 3</div>
+                <div class="phase-goal">Goal: Secure stakeholder buy-in before making any live changes to server</div>
+            </div>
+            <div class="phase-content">
+                <div class="action">
+                    <h4>Proposal Distribution</h4>
+                    <p>Pin comprehensive proposal PDF in announcements channel with message. Upload to Google Drive with comment permissions enabled. Send direct messages to key stakeholders (co-admins, highly active members). Include clear call-to-action: review document, attend presentation meeting, complete feedback form. Give 48-72 hours for asynchronous review before meeting.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Pinned announcement message with Google Drive link and calendar invite</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Presentation Meeting</h4>
+                    <p>Host scheduled voice channel presentation (ideal time: weekend evening for gaming crowd). Screen share through slide deck, walking slowly through each option with Q&A after each section. Conduct live poll using Discord poll feature or external tool. Allow 5 minutes for voting. Record entire meeting for those unable to attend. Take notes on concerns raised and questions asked. End with clear next steps and timeline for implementation.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Meeting recording, poll results screenshot, notes document with attendance list</span>
+                    </div>
+                </div>
+
+                <div class="action">
+                    <h4>Feedback Iteration Round</h4>
+                    <p>Create temporary feedback-restructure channel. Pin Google Form with questions on specific concerns, suggestions for tweaks, and confidence rating. Synthesize feedback over 24-48 hours. Make minor adjustments if 3+ people raise same concern. Update proposal to version 1.1 if changes made. Publish final decision announcement with 7-day countdown to implementation. Include FAQ addressing common concerns raised.</p>
+                    <div class="deliverable">
+                        <span class="deliverable-label">Deliverable:</span>
+                        <span class="deliverable-text">Feedback summary document, updated proposal (if applicable), final decision announcement message</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <h2>Professional Implementation Tips (Research-Backed)</h2>
+            <div class="tips-grid">
+                <div class="tip">
+                    <h3>Enable Community Features First</h3>
+                    <p>Before restructuring, activate Discord's Community Server features in Server Settings. This unlocks Forums (perfect for RP scenarios), Welcome Screen customization, Server Guide, and improved moderation tools including AutoMod and member screening.</p>
+                </div>
+                <div class="tip">
+                    <h3>Use View As Role Tool</h3>
+                    <p>After designing permission structures, use Discord's built-in View Server As Role feature to preview exactly what each role sees. Test with combinations to ensure proper access.</p>
+                </div>
+                <div class="tip">
+                    <h3>Implement Thread-Based Organization</h3>
+                    <p>For RP scenarios and extended gaming sessions, use Discord Threads instead of creating dozens of channels. Create a main RP-Scenarios channel, then start threads for each story arc. Threads auto-archive after inactivity, keeping the channel list clean while preserving conversation history.</p>
+                </div>
+                <div class="tip">
+                    <h3>Channel Naming Best Practices</h3>
+                    <p>Use clear, consistent naming conventions. Prefix text channels with emoji for visual scanning. Keep names lowercase with hyphens. Avoid abbreviations that new members will not understand. Add channel topics with usage instructions.</p>
+                </div>
+                <div class="tip">
+                    <h3>Create Channel Limit Budget</h3>
+                    <p>Discord allows 500 total channels per server and 50 channels per category. Plan with headroom for future growth. If you are at 30 channels now, design for 40-50 max to avoid another restructure in six months.</p>
+                </div>
+                <div class="tip">
+                    <h3>Set Notification Defaults</h3>
+                    <p>In Server Settings, set default notification to Only @mentions to prevent notification fatigue. For your 50-member server, unrestricted notifications will drive people to mute the server entirely, reducing engagement.</p>
+                </div>
+                <div class="tip">
+                    <h3>Add Verification Gate</h3>
+                    <p>Use Discord's built-in member screening or onboarding questions to create a verification system. New members see only welcome/rules channels until they complete intro or accept rules. This reduces spam and makes members more invested.</p>
+                </div>
+                <div class="tip">
+                    <h3>Prepare Backup Strategy</h3>
+                    <p>Use a bot like ServerStats or manually screenshot all permission settings before restructuring. Export member list with roles. This creates a safety net if you need to revert changes. Document the before state thoroughly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <h2>Recommended Tools by Phase</h2>
+            <div class="tools-grid">
+                <div class="tool-category">
+                    <h3>Research & Documentation</h3>
+                    <ul>
+                        <li>Google Forms / Typeform (surveys)</li>
+                        <li>Google Sheets (audit, matrices)</li>
+                        <li>Canva (persona cards, SWOT)</li>
+                        <li>Discord Server Insights (analytics)</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>Visualization</h3>
+                    <ul>
+                        <li>draw.io / Lucidchart (diagrams)</li>
+                        <li>Figma (UI mockups)</li>
+                        <li>Miro / Trello (project boards)</li>
+                        <li>TeamGantt (timeline charts)</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>Documentation & Presentation</h3>
+                    <ul>
+                        <li>Google Docs (proposal PDF)</li>
+                        <li>PowerPoint / Google Slides (deck)</li>
+                        <li>Discord (polls, feedback channels)</li>
+                        <li>OBS Studio (meeting recordings)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>Ready to Execute?</h3>
+            <p>This plan combines corporate project management rigor with UX research methodology and Discord platform expertise. Follow sequentially for maximum stakeholder buy-in and minimal implementation risk.</p>
+            <div class="footer-meta">
+                Total Effort: ~40 hours spread over 3 weeks | Risk Level: Low | Buy-in Potential: Very High
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePhase(phaseId) {
+            var phase = document.getElementById(phaseId);
+            if (phase.classList.contains('active')) {
+                phase.classList.remove('active');
+            } else {
+                phase.classList.add('active');
+            }
+        }
+
+        // Expand first phase by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('phase1').classList.add('active');
+        });
+    </script>
+</body>
+</html>
