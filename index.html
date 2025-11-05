@@ -651,4 +651,79 @@
                 </div>
                 <div class="tip">
                     <h3>Create Channel Limit Budget</h3>
-                    <p>Discord allows 500
+                    <p>Discord allows 500 total channels per server and 50 channels per category. Plan with headroom for future growth. If you are at 30 channels now, design for 40-50 max to avoid another restructure in six months.</p>
+                </div>
+                <div class="tip">
+                    <h3>Set Notification Defaults</h3>
+                    <p>In Server Settings, set default notification to Only @mentions to prevent notification fatigue. For your 50-member server, unrestricted notifications will drive people to mute the server entirely, reducing engagement.</p>
+                </div>
+                <div class="tip">
+                    <h3>Add Verification Gate</h3>
+                    <p>Use Discord's built-in member screening or onboarding questions to create a verification system. New members see only welcome/rules channels until they complete intro or accept rules. This reduces spam and makes members more invested.</p>
+                </div>
+                <div class="tip">
+                    <h3>Prepare Backup Strategy</h3>
+                    <p>Use a bot like ServerStats or manually screenshot all permission settings before restructuring. Export member list with roles. This creates a safety net if you need to revert changes. Document the before state thoroughly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <h2>Recommended Tools by Phase</h2>
+            <div class="tools-grid">
+                <div class="tool-category">
+                    <h3>Research & Documentation</h3>
+                    <ul>
+                        <li>Google Forms / Typeform (surveys)</li>
+                        <li>Google Sheets (audit, matrices)</li>
+                        <li>Canva (persona cards, SWOT)</li>
+                        <li>Discord Server Insights (analytics)</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>Visualization</h3>
+                    <ul>
+                        <li>draw.io / Lucidchart (diagrams)</li>
+                        <li>Figma (UI mockups)</li>
+                        <li>Miro / Trello (project boards)</li>
+                        <li>TeamGantt (timeline charts)</li>
+                    </ul>
+                </div>
+                <div class="tool-category">
+                    <h3>Documentation & Presentation</h3>
+                    <ul>
+                        <li>Google Docs (proposal PDF)</li>
+                        <li>PowerPoint / Google Slides (deck)</li>
+                        <li>Discord (polls, feedback channels)</li>
+                        <li>OBS Studio (meeting recordings)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>Ready to Execute?</h3>
+            <p>This plan combines solid project management with user feedback and Discord expertise. Follow the steps for a smooth rollout with good member support.</p>
+            <div class="footer-meta">
+                Total Effort: ~40 hours spread over 3 weeks | Risk Level: Low | Buy-in Potential: Very High
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePhase(phaseId) {
+            var phase = document.getElementById(phaseId);
+            if (phase.classList.contains('active')) {
+                phase.classList.remove('active');
+            } else {
+                phase.classList.add('active');
+            }
+        }
+
+        // Expand first phase by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('phase1').classList.add('active');
+        });
+    </script>
+</body>
+</html>
